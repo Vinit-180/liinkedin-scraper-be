@@ -13,7 +13,8 @@ async function ConnectToDB(){
 export const connectToDB=ConnectToDB;
 
 const AuthorSchema=new Schema({
-    profileURN:{type:String,require:true},
+    profileURN:{type:String,require:true,unique:true},
+    profilePicUrl:{type:String},
     lastSynced:{type:Date,default:Date.now}
 })
 
@@ -22,7 +23,7 @@ export const AuthorModel=model("author",AuthorSchema);
 
 const PostSchema=new Schema({
     url:{type:String,require:true},
-    profileURN:{type:String,require:true},
+    profileURN:{type:String,require:true,ref:'author'},
     content:{type:String,require:true},
     fetchedAt:{type:Date,default:Date.now}
 })

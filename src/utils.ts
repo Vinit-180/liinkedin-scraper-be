@@ -8,7 +8,7 @@ export const fetchPosts = async (profileURN: string,userAgent:string, Cookies: s
 
   await page.setUserAgent(userAgent);
   await page.setCookie({ name: 'li_at', value: Cookies, domain: '.linkedin.com' });
-  // await page.Cook({ name: 'li_at', value: cookies, domain: '.linkedin.com' });
+  
   // Navigate to profile activity page
   console.log(profileURN,Cookies,'------------')
   const activityURL = `${profileURN}/recent-activity/comments/`;
@@ -66,3 +66,33 @@ if (!lastSync || now - lastSync > 24 * 60 * 60 * 1000) {
 }
 
  */
+
+
+
+export const getProfilePicture = async (profileURN:string,userAgent:string, sessionCookie:string) => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.setUserAgent(userAgent);
+  await page.setCookie({name: 'li_at',value: sessionCookie,domain: '.linkedin.com',});
+
+  console.log(`Navigating to: ${profileURN}`);
+
+  await page.goto(profileURN, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+  try {
+
+      await page.waitForSelector('img', { timeout: 10000 });
+      const profilePicUrl = await page.evaluate(() => {
+          const profilePicElement = document.querySelector('img[class*="profile-picture__image--show"]'); // Adjust selector as needed
+          return profilePicElement ? profilePicElement.getAttribute('src') : null;
+      });
+
+      console.log(`Profile Picture URL: ${profilePicUrl}`);
+      await browser.close();
+      return profilePicUrl;
+  } catch (error) {
+      console.error('Failed to find profile picture:', error);
+      await browser.close();
+      return null;
+  }
+};
