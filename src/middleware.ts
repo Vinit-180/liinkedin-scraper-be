@@ -15,9 +15,9 @@ export const checkExistURN = async (req: Request, res: Response, next: NextFunct
             }
         }
         req.body.isExist=true;
+        req.body.existedUser=isExist;
         console.log("is already Exist");
         next();
-
     }
     catch (err) {
         res.status(500).send({ message: "Internal Server Error", error: err });

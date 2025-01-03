@@ -31,3 +31,15 @@ const PostSchema=new Schema({
 export const PostModel=model("post",PostSchema)
 
 
+
+
+const UserSchema=new Schema({
+    email:{type:String,require:true,unique:true},
+    password:{type:String,require:true},
+    sessionCookies:{type:String},
+    linkedinUrl:{type:String},
+    jwtToken:{type:String}
+
+})
+
+export const UserModel=model("user",UserSchema);
