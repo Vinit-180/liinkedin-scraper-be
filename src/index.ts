@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 const CORSOptions = {
-  origin: ['http://localhost:3000','https://linkedin-scraper-weld.vercel.app/'],
+  origin: ['http://localhost:3000','https://linkedin-scraper-weld.vercel.app'],
   credentials: true
 }
 
