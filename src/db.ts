@@ -34,12 +34,13 @@ export const PostModel=model("post",PostSchema)
 
 
 const UserSchema=new Schema({
+    name:{type:String,require:true},
     email:{type:String,require:true,unique:true},
     password:{type:String,require:true},
     sessionCookies:{type:String},
     linkedinUrl:{type:String},
-    jwtToken:{type:String}
-
+    jwtToken:{type:String},
+    isVerified:{type:Boolean,default:false}
 })
 
 export const UserModel=model("user",UserSchema);

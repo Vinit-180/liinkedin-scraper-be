@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-
+import bcrypt from "bcrypt";
 export const fetchPosts = async (profileURN: string, userAgent: string, Cookies: string) => {
   var posts = [];
   const browser = await puppeteer.launch({ headless: true });
@@ -97,3 +97,10 @@ export const getProfilePicture = async (profileURN: string, userAgent: string, s
     await browser.close();
 }
 };
+
+
+
+export const comparePassword=async(inputPassword:string,userPassword:string)=>{
+  const isTrue=await bcrypt.compare(inputPassword,userPassword);
+  return isTrue;
+}
