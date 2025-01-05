@@ -13,7 +13,9 @@ app.use(express.json());
 
 const CORSOptions = {
   origin: ['http://localhost:3000','https://linkedin-scraper-weld.vercel.app'],
-  credentials: true
+  credentials: true,
+  methods: ['POST','GET']
+
 }
 
 app.use(cors(CORSOptions));
@@ -70,10 +72,25 @@ app.post("/api/v1/username", isValidUser, checkExistURN, async (req, res) => {
   }
   catch (err) {
     res.send({ message: "Getting Error while inserting in DB", error: err });
+    return;
   }
 
 })
 
+app.get("/api/v1/username", isValidUser, async (req, res) => {
+  try {
+    const userData = await AuthorModel.find();
+    if (userData) {
+      res.send({ message: "User Data Retrieved Successfully", data: userData });
+      return ;
+    }
+    else {
+      res.send({ message: "Sorry We're unable to serve the request at this time. Please, try after some time :(" });
+    }
+  } catch (err) {
+    res.status(500).send({ message: "Internal Server Error", error: err })
+  }
+})
 app.get("/api/v1/posts", async (req, res) => {
   try {
 
@@ -99,20 +116,6 @@ app.get("/api/v1/posts", async (req, res) => {
   }
 })
 
-app.get("/api/v1/username", isValidUser, async (req, res) => {
-  try {
-    const userData = await AuthorModel.find();
-    if (userData) {
-      res.send({ message: "User Data Retrieved Successfully", data: userData });
-      return ;
-    }
-    else {
-      res.send({ message: "Sorry We're unable to serve the request at this time. Please, try after some time :(" });
-    }
-  } catch (err) {
-    res.status(500).send({ message: "Internal Server Error", error: err })
-  }
-})
 
 
 app.post("/api/v1/user/signup", async (req, res) => {

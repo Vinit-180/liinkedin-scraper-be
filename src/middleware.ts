@@ -6,8 +6,7 @@ export const checkExistURN = async (req: Request, res: Response, next: NextFunct
         const profileURN = req.body.profileURN;
         const isExist = await AuthorModel.find({ profileURN: profileURN });
         console.log(isExist)
-
-
+        
         if (isExist.length === 0) {
             const newUser = await AuthorModel.create({ profileURN: profileURN });
             if (newUser) {
@@ -20,7 +19,9 @@ export const checkExistURN = async (req: Request, res: Response, next: NextFunct
         next();
     }
     catch (err) {
+        console.log("ERROR",err);
         res.status(500).send({ message: "Internal Server Error", error: err });
+        return ;
     }
 }
 
@@ -53,7 +54,9 @@ export const isValidUser = async (req: Request, res: Response, next: NextFunctio
         }
     }
     catch (err) {
+        console.log(err);
         res.status(500).json({ message: "Internal Server Error", error: err });
+        return ;
     }
 }
 
